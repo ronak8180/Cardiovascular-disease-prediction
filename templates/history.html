@@ -8,6 +8,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -67,10 +68,6 @@
                     </select>
                 </div>
                 
-                <div class="search-group">
-                    <input type="text" id="searchInput" placeholder="Search predictions..." onkeyup="searchHistory()">
-                    <i class="fas fa-search"></i>
-                </div>
             </div>
             
             <div class="export-section">
@@ -542,13 +539,61 @@
         }
 
         function exportHistory() {
-            // Mock export functionality
-            alert('Exporting prediction history...');
+            // Export all predictions as CSV
+            const csvRows = [];
+            const headers = [
+                'Date', 'Time', 'Risk', 'Probability', 'Status', 'Age', 'BMI', 'Exercise', 'Smoking', 'Diabetes'
+            ];
+            csvRows.push(headers.join(','));
+            historyData.forEach(pred => {
+                csvRows.push([
+                    pred.date,
+                    pred.time,
+                    pred.risk,
+                    pred.probability,
+                    pred.status,
+                    pred.factors.age,
+                    pred.factors.bmi,
+                    pred.factors.exercise,
+                    pred.factors.smoking,
+                    pred.factors.diabetes
+                ].map(val => `"${val}"`).join(','));
+            });
+            const csvContent = csvRows.join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'prediction_history.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
 
         function exportPrediction(id) {
-            // Mock export functionality
-            alert(`Exporting prediction ${id}...`);
+            // Export single prediction as PDF
+            const pred = historyData.find(p => p.id === id) || filteredData.find(p => p.id === id);
+            if (!pred) {
+                alert('Prediction not found!');
+                return;
+            }
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.setFontSize(18);
+            doc.text('Heart Disease Prediction Report', 10, 15);
+            doc.setFontSize(12);
+            doc.text(`Date: ${pred.date}   Time: ${pred.time}`, 10, 30);
+            doc.text(`Risk Level: ${pred.risk}`, 10, 40);
+            doc.text(`Probability: ${pred.probability}%`, 10, 50);
+            doc.text(`Status: ${pred.status}`, 10, 60);
+            doc.text('Health Factors:', 10, 75);
+            let y = 85;
+            Object.entries(pred.factors).forEach(([key, value]) => {
+                doc.text(`${key}: ${value}`, 15, y);
+                y += 10;
+            });
+            doc.save(`prediction_${id}.pdf`);
         }
 
         // Close modal when clicking outside

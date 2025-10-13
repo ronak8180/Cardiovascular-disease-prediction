@@ -1,6 +1,90 @@
 [
   {
     "date": "2025-10-13",
+    "time": "18:36",
+    "risk": "Low",
+    "probability": 36.4,
+    "status": "success",
+    "factors": {
+      "age": "Middle-Aged",
+      "bmi": "Underweight",
+      "exercise": "Yes",
+      "smoking": "No",
+      "diabetes": "Yes"
+    }
+  },
+  {
+    "date": "2025-10-13",
+    "time": "18:29",
+    "risk": "Low",
+    "probability": 37.8,
+    "status": "success",
+    "factors": {
+      "age": "Young-Adult",
+      "bmi": "Normal weight",
+      "exercise": "No",
+      "smoking": "Yes",
+      "diabetes": "Yes"
+    }
+  },
+  {
+    "date": "2025-10-13",
+    "time": "18:26",
+    "risk": "Low",
+    "probability": 22.7,
+    "status": "success",
+    "factors": {
+      "age": "Middle-Aged",
+      "bmi": "Normal weight",
+      "exercise": "Yes",
+      "smoking": "Yes",
+      "diabetes": "No"
+    }
+  },
+  {
+    "date": "2025-10-13",
+    "time": "18:23",
+    "risk": "Medium",
+    "probability": 50.8,
+    "status": "warning",
+    "factors": {
+      "age": "Middle-Aged",
+      "bmi": "Overweight",
+      "exercise": "Yes",
+      "smoking": "Yes",
+      "diabetes": "Yes"
+    }
+  },
+  {
+    "date": "2025-10-13",
+    "time": "18:17",
+    "risk": "Low",
+    "probability": 15.7,
+    "status": "success",
+    "factors": {
+      "age": "Adult",
+      "bmi": "Normal weight",
+      "exercise": "Yes",
+      "smoking": "No",
+      "diabetes": "Yes"
+    }
+  },
+  {
+    "date": "2025-10-13",
+    "time": "18:16",
+    "risk": "Medium",
+    "probability": 56.2,
+    "status": "warning",
+    "factors": {
+      "age": "Middle-Aged",
+      "bmi": "Normal weight",
+      "exercise": "Yes",
+      "smoking": "Yes",
+      "diabetes": "Yes"
+    }
+  },
+  {
+    "date": "2025-10-13",
     "time": "16:46",
     "risk": "Medium",
     "probability": 46.5,
