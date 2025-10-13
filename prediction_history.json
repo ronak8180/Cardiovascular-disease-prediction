@@ -1,0 +1,16 @@
+[
+  {
+    "date": "2025-10-13",
+    "time": "16:46",
+    "risk": "Medium",
+    "probability": 46.5,
+    "status": "warning",
+    "factors": {
+      "age": "Senior-Adult",
+      "bmi": "Normal weight",
+      "exercise": "No",
+      "smoking": "Yes",
+      "diabetes": "Yes"
+    }
+  }
+]

@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Disease Prediction System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav class="main-nav">
+            <div class="nav-brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>HeartAI</span>
+            </div>
+            <div class="nav-links">
+                <a href="/dashboard" class="nav-link">
+                    <i class="fas fa-tachometer-alt"></i>
+                    Dashboard
+                </a>
+                <a href="/predict" class="nav-link active">
+                    <i class="fas fa-calculator"></i>
+                    Predict
+                </a>
+                <a href="/history" class="nav-link">
+                    <i class="fas fa-history"></i>
+                    History
+                </a>
+                <a href="/about" class="nav-link">
+                    <i class="fas fa-info-circle"></i>
+                    About
+                </a>
+            </div>
+        </nav>
+
+        <header>
+            <h1><i class="fas fa-heartbeat"></i> Heart Disease Prediction</h1>
+            <p>Enter your health information below to get a prediction about your heart disease risk</p>
+            <div class="progress-indicator">
+                <div class="progress-step active" data-step="1">
+                    <i class="fas fa-user"></i>
+                    <span>Personal Info</span>
+                </div>
+                <div class="progress-step" data-step="2">
+                    <i class="fas fa-stethoscope"></i>
+                    <span>Health Status</span>
+                </div>
+                <div class="progress-step" data-step="3">
+                    <i class="fas fa-running"></i>
+                    <span>Lifestyle</span>
+                </div>
+                <div class="progress-step" data-step="4">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Results</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="form-container">
+            <form id="predictionForm">
+                <!-- New Prediction Button (Top) -->
+                <div class="actions" style="margin-bottom: 20px; display: flex; justify-content: center;">
+                    <button type="button" class="submit-btn newPredictionBtn">
+                        <i class="fas fa-user-plus"></i> New Prediction
+                    </button>
+                </div>
+                <div class="form-grid">
+                    <!-- Personal Information -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-user"></i> Personal Information</h3>
+                        
+                        <div class="form-group">
+                            <label for="sex">Gender</label>
+                            <select id="sex" name="sex" required>
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="age_category">Age Category</label>
+                            <select id="age_category" name="age_category" required>
+                                <option value="">Select your age group</option>
+                                <option value="Young-Adult">Young Adult (18-30 years old)</option>
+                                <option value="Adult">Adult (31-45 years old)</option>
+                                <option value="Middle-Aged">Middle-Aged (46-60 years old)</option>
+                                <option value="Senior-Adult">Senior Adult (61-75 years old)</option>
+                                <option value="Elderly">Elderly (75+ years old)</option>
+                            </select>
+                            <small class="field-help">Select the age group that best represents your current age</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="height">Height (cm)</label>
+                            <input type="number" id="height" name="height" min="100" max="250" required placeholder="e.g., 175">
+                            <small class="field-help">Enter your height in centimeters (1 foot = 30.48 cm)</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="weight">Weight (kg)</label>
+                            <input type="number" id="weight" name="weight" min="30" max="200" step="0.1" required placeholder="e.g., 70.5">
+                            <small class="field-help">Enter your weight in kilograms (1 pound = 0.45 kg)</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bmi">BMI (Body Mass Index)</label>
+                            <input type="number" id="bmi" name="bmi" min="10" max="60" step="0.1" required placeholder="Auto-calculated">
+                            <small class="field-help">BMI will be automatically calculated when you enter height and weight</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bmi_group">BMI Category</label>
+                            <select id="bmi_group" name="bmi_group" required>
+                                <option value="">Select BMI Category</option>
+                                <option value="Underweight">Underweight (BMI < 18.5)</option>
+                                <option value="Normal weight">Normal weight (BMI 18.5-24.9)</option>
+                                <option value="Overweight">Overweight (BMI 25-29.9)</option>
+                                <option value="Obese I">Obese I (BMI 30-34.9)</option>
+                                <option value="Obese II">Obese II (BMI 35-39.9)</option>
+                                <option value="Obese III">Obese III (BMI ≥ 40)</option>
+                            </select>
+                            <small class="field-help">This will be automatically selected based on your BMI calculation</small>
+                        </div>
+                    </div>
+
+                    <!-- Health Information -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-stethoscope"></i> Health Information</h3>
+                        
+                        <div class="form-group">
+                            <label for="general_health">General Health Status</label>
+                            <select id="general_health" name="general_health" required>
+                                <option value="">How would you rate your overall health?</option>
+                                <option value="Poor">Poor - I have significant health issues</option>
+                                <option value="Fair">Fair - I have some health concerns</option>
+                                <option value="Good">Good - I'm generally healthy with minor issues</option>
+                                <option value="Very Good">Very Good - I'm in good health</option>
+                                <option value="Excellent">Excellent - I'm in excellent health</option>
+                            </select>
+                            <small class="field-help">Rate your overall physical health condition</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="checkup">Last Health Checkup</label>
+                            <select id="checkup" name="checkup" required>
+                                <option value="">When was your last health checkup?</option>
+                                <option value="Within past year">Within the past year (0-12 months ago)</option>
+                                <option value="Within past 2 years">Within the past 2 years (1-2 years ago)</option>
+                                <option value="Within past 5 years">Within the past 5 years (2-5 years ago)</option>
+                                <option value="5 or more years ago">More than 5 years ago</option>
+                                <option value="Never">Never had a health checkup</option>
+                            </select>
+                            <small class="field-help">When did you last visit a doctor for a general health checkup?</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exercise">Physical Exercise</label>
+                            <select id="exercise" name="exercise" required>
+                                <option value="">Do you engage in regular physical exercise?</option>
+                                <option value="Yes">Yes - I exercise regularly (3+ times per week)</option>
+                                <option value="Yes">Yes - I exercise occasionally (1-2 times per week)</option>
+                                <option value="No">No - I rarely or never exercise</option>
+                            </select>
+                            <small class="field-help">Include any physical activity like walking, gym, sports, etc.</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="diabetes">Diabetes</label>
+                            <select id="diabetes" name="diabetes" required>
+                                <option value="">Select Diabetes Status</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="depression">Depression</label>
+                            <select id="depression" name="depression" required>
+                                <option value="">Select Depression Status</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="arthritis">Arthritis</label>
+                            <select id="arthritis" name="arthritis" required>
+                                <option value="">Select Arthritis Status</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Cancer Information -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-ribbon"></i> Cancer Information</h3>
+                        
+                        <div class="form-group">
+                            <label for="skin_cancer">Skin Cancer</label>
+                            <select id="skin_cancer" name="skin_cancer" required>
+                                <option value="">Select Skin Cancer Status</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="other_cancer">Other Cancer</label>
+                            <select id="other_cancer" name="other_cancer" required>
+                                <option value="">Select Other Cancer Status</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Lifestyle Information -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-running"></i> Lifestyle Information</h3>
+                        
+                        <div class="form-group">
+                            <label for="smoking_history">Smoking History</label>
+                            <select id="smoking_history" name="smoking_history" required>
+                                <option value="">Select your smoking status</option>
+                                <option value="No">Never smoked</option>
+                                <option value="Yes">Current smoker</option>
+                                <option value="Yes">Former smoker (quit within 5 years)</option>
+                                <option value="Yes">Former smoker (quit more than 5 years ago)</option>
+                            </select>
+                            <small class="field-help">Select your current or past smoking status</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="alcohol_consumption">Alcohol Consumption</label>
+                            <select id="alcohol_consumption" name="alcohol_consumption" required>
+                                <option value="">Select your alcohol consumption</option>
+                                <option value="0">Never drink alcohol</option>
+                                <option value="1">Rarely (1-2 days per month)</option>
+                                <option value="3">Occasionally (3-5 days per month)</option>
+                                <option value="8">Moderately (6-10 days per month)</option>
+                                <option value="15">Regularly (11-20 days per month)</option>
+                                <option value="25">Frequently (21-30 days per month)</option>
+                            </select>
+                            <small class="field-help">How often do you consume alcoholic beverages?</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="fruit_consumption">Fruit Consumption</label>
+                            <select id="fruit_consumption" name="fruit_consumption" required>
+                                <option value="">Select your fruit consumption</option>
+                                <option value="0">Never eat fruits</option>
+                                <option value="5">Rarely (1-5 days per month)</option>
+                                <option value="10">Occasionally (6-10 days per month)</option>
+                                <option value="15">Moderately (11-15 days per month)</option>
+                                <option value="20">Regularly (16-20 days per month)</option>
+                                <option value="25">Frequently (21-25 days per month)</option>
+                                <option value="30">Daily (26-30 days per month)</option>
+                            </select>
+                            <small class="field-help">How often do you eat fresh fruits?</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="vegetables_consumption">Vegetables Consumption</label>
+                            <select id="vegetables_consumption" name="vegetables_consumption" required>
+                                <option value="">Select your vegetable consumption</option>
+                                <option value="0">Never eat vegetables</option>
+                                <option value="5">Rarely (1-5 days per month)</option>
+                                <option value="10">Occasionally (6-10 days per month)</option>
+                                <option value="15">Moderately (11-15 days per month)</option>
+                                <option value="20">Regularly (16-20 days per month)</option>
+                                <option value="25">Frequently (21-25 days per month)</option>
+                                <option value="30">Daily (26-30 days per month)</option>
+                            </select>
+                            <small class="field-help">How often do you eat fresh vegetables?</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="potato_consumption">Potato Consumption</label>
+                            <select id="potato_consumption" name="potato_consumption" required>
+                                <option value="">Select your potato consumption</option>
+                                <option value="0">Never eat potatoes</option>
+                                <option value="3">Rarely (1-3 days per month)</option>
+                                <option value="6">Occasionally (4-6 days per month)</option>
+                                <option value="10">Moderately (7-10 days per month)</option>
+                                <option value="15">Regularly (11-15 days per month)</option>
+                                <option value="20">Frequently (16-20 days per month)</option>
+                                <option value="25">Very frequently (21-25 days per month)</option>
+                                <option value="30">Daily (26-30 days per month)</option>
+                            </select>
+                            <small class="field-help">How often do you eat potatoes (including fries, chips, etc.)?</small>
+                        </div>
+                    </div>
+                </div>
+
+
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-calculator"></i> Predict Heart Disease Risk
+                </button>
+            </form>
+        </div>
+
+        <!-- Results Section -->
+        <div id="results" class="results-container" style="display: none;">
+            <h2><i class="fas fa-chart-line"></i> Prediction Results</h2>
+            <div id="resultContent"></div>
+            
+            <!-- Interactive Charts Section -->
+            <div class="charts-section">
+                <h3><i class="fas fa-chart-pie"></i> Risk Analysis</h3>
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <canvas id="riskChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="factorsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Health Tips Section -->
+            <div class="health-tips">
+                <h3><i class="fas fa-lightbulb"></i> Personalized Health Tips</h3>
+                <div id="healthTipsContent"></div>
+            </div>
+        </div>
+
+        <!-- New Prediction Button -->
+        <div class="actions" style="margin-top: 20px; display: flex; justify-content: center;">
+            <button type="button" class="submit-btn newPredictionBtn">
+                <i class="fas fa-user-plus"></i> New Prediction
+            </button>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div id="loading" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Analyzing your data...</p>
+        </div>
+    </div>
+
+    <script>
+        // Global variables for charts
+        let riskChart = null;
+        let factorsChart = null;
+        
+        // Initialize animations and interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeAnimations();
+            setupFormInteractions();
+            setupProgressIndicator();
+            setupNewPredictionButton();
+        });
+        
+        function initializeAnimations() {
+            // Animate header elements
+            anime({
+                targets: 'header h1',
+                translateY: [-50, 0],
+                opacity: [0, 1],
+                duration: 1000,
+                easing: 'easeOutExpo'
+            });
+            
+            anime({
+                targets: '.form-section',
+                translateX: [-100, 0],
+                opacity: [0, 1],
+                duration: 800,
+                delay: anime.stagger(200),
+                easing: 'easeOutExpo'
+            });
+        }
+
+        function setupNewPredictionButton() {
+            const buttons = document.querySelectorAll('.newPredictionBtn');
+            const form = document.getElementById('predictionForm');
+            const results = document.getElementById('results');
+            if (!buttons || buttons.length === 0) return;
+            buttons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Reset form fields
+                    form.reset();
+                    // Clear calculated BMI and any error messages
+                    const bmiInput = document.getElementById('bmi');
+                    if (bmiInput) bmiInput.value = '';
+                    document.querySelectorAll('.field-error').forEach(el => el.remove());
+                    document.querySelectorAll('input.error, select.error').forEach(el => el.classList.remove('error'));
+                    // Hide results and reset progress indicator
+                    results.style.display = 'none';
+                    updateProgressIndicator(1);
+                    // Scroll to top of form
+                    document.querySelector('header').scrollIntoView({ behavior: 'smooth' });
+                    showNotification('Form cleared. Ready for a new user.', 'success');
+                });
+            });
+        }
+        
+        function setupFormInteractions() {
+            // Add real-time validation feedback
+            const inputs = document.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                input.addEventListener('blur', validateField);
+                input.addEventListener('input', clearValidation);
+            });
+            
+            // Auto-calculate BMI when height and weight are entered
+            document.getElementById('height').addEventListener('input', calculateBMI);
+            document.getElementById('weight').addEventListener('input', calculateBMI);
+        }
+        
+        function setupProgressIndicator() {
+            const steps = document.querySelectorAll('.progress-step');
+            const sections = document.querySelectorAll('.form-section');
+            
+            // Add click handlers to progress steps
+            steps.forEach((step, index) => {
+                step.addEventListener('click', () => {
+                    if (index < sections.length) {
+                        sections[index].scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+        }
+        
+        function validateField(event) {
+            const field = event.target;
+            const value = field.value.trim();
+            
+            if (field.hasAttribute('required') && !value) {
+                showFieldError(field, 'This field is required');
+                return false;
+            }
+            
+            // Specific validations
+            if (field.id === 'height' && value) {
+                const height = parseFloat(value);
+                if (height < 100 || height > 250) {
+                    showFieldError(field, 'Height should be between 100-250 cm');
+                    return false;
+                }
+            }
+            
+            if (field.id === 'weight' && value) {
+                const weight = parseFloat(value);
+                if (weight < 30 || weight > 200) {
+                    showFieldError(field, 'Weight should be between 30-200 kg');
+                    return false;
+                }
+            }
+            
+            clearFieldError(field);
+            return true;
+        }
+        
+        function showFieldError(field, message) {
+            clearFieldError(field);
+            field.classList.add('error');
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'field-error';
+            errorDiv.textContent = message;
+            field.parentNode.appendChild(errorDiv);
+        }
+        
+        function clearFieldError(field) {
+            field.classList.remove('error');
+            const existingError = field.parentNode.querySelector('.field-error');
+            if (existingError) {
+                existingError.remove();
+            }
+        }
+        
+        function clearValidation(event) {
+            const field = event.target;
+            if (field.classList.contains('error')) {
+                clearFieldError(field);
+            }
+        }
+
+        function calculateBMI() {
+            const height = parseFloat(document.getElementById('height').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            
+            if (height && weight) {
+                const bmi = (weight / ((height / 100) ** 2)).toFixed(1);
+                document.getElementById('bmi').value = bmi;
+                
+                // Auto-select BMI group with animation
+                const bmiGroup = document.getElementById('bmi_group');
+                let bmiCategory = '';
+                if (bmi < 18.5) bmiCategory = 'Underweight';
+                else if (bmi < 25) bmiCategory = 'Normal weight';
+                else if (bmi < 30) bmiCategory = 'Overweight';
+                else if (bmi < 35) bmiCategory = 'Obese I';
+                else if (bmi < 40) bmiCategory = 'Obese II';
+                else bmiCategory = 'Obese III';
+                
+                bmiGroup.value = bmiCategory;
+                
+                // Animate BMI calculation
+                anime({
+                    targets: '#bmi',
+                    scale: [1, 1.1, 1],
+                    duration: 300,
+                    easing: 'easeInOutQuad'
+                });
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('predictionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Validate all fields before submission
+            const inputs = document.querySelectorAll('input[required], select[required]');
+            let isValid = true;
+            
+            inputs.forEach(input => {
+                if (!validateField({ target: input })) {
+                    isValid = false;
+                }
+            });
+            
+            if (!isValid) {
+                showNotification('Please fill in all required fields correctly', 'error');
+                return;
+            }
+            
+            const formData = new FormData(this);
+            const loading = document.getElementById('loading');
+            const results = document.getElementById('results');
+            
+            // Update progress indicator
+            updateProgressIndicator(4);
+            
+            // Show loading with animation
+            loading.style.display = 'block';
+            results.style.display = 'none';
+            
+            // Animate loading spinner
+            anime({
+                targets: '.spinner',
+                rotate: 360,
+                duration: 1000,
+                loop: true,
+                easing: 'linear'
+            });
+            
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    displayResults(data);
+                    showNotification('Prediction completed successfully!', 'success');
+                } else {
+                    displayError(data.error || 'An error occurred');
+                    showNotification('Prediction failed. Please try again.', 'error');
+                }
+            } catch (error) {
+                displayError('Network error: ' + error.message);
+                showNotification('Network error. Please check your connection.', 'error');
+            } finally {
+                loading.style.display = 'none';
+            }
+        });
+        
+        function updateProgressIndicator(step) {
+            const steps = document.querySelectorAll('.progress-step');
+            steps.forEach((stepEl, index) => {
+                if (index < step) {
+                    stepEl.classList.add('active', 'completed');
+                } else if (index === step - 1) {
+                    stepEl.classList.add('active');
+                    stepEl.classList.remove('completed');
+                } else {
+                    stepEl.classList.remove('active', 'completed');
+                }
+            });
+        }
+        
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                <span>${message}</span>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            anime({
+                targets: notification,
+                translateY: [-50, 0],
+                opacity: [0, 1],
+                duration: 300,
+                easing: 'easeOutExpo'
+            });
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                anime({
+                    targets: notification,
+                    translateY: [0, -50],
+                    opacity: [1, 0],
+                    duration: 300,
+                    easing: 'easeInExpo',
+                    complete: () => notification.remove()
+                });
+            }, 3000);
+        }
+
+        function displayResults(data) {
+            const results = document.getElementById('results');
+            const resultContent = document.getElementById('resultContent');
+            
+            const riskColor = data.risk_level === 'High' ? '#e74c3c' : 
+                             data.risk_level === 'Medium' ? '#f39c12' : '#27ae60';
+            
+            const predictionText = data.prediction === 1 ? 'At Risk' : 'Not At Risk';
+            const predictionColor = data.prediction === 1 ? '#e74c3c' : '#27ae60';
+            
+            resultContent.innerHTML = `
+                <div class="result-card">
+                    <div class="prediction-header">
+                        <h3 style="color: ${predictionColor}">
+                            <i class="fas fa-${data.prediction === 1 ? 'exclamation-triangle' : 'check-circle'}"></i>
+                            ${predictionText}
+                        </h3>
+                        <p class="model-used">Model: ${data.model_used}</p>
+                    </div>
+                    
+                    <div class="probability-section">
+                        <h4>Risk Probabilities</h4>
+                        <div class="probability-bars">
+                            <div class="prob-bar">
+                                <label>No Heart Disease</label>
+                                <div class="bar-container">
+                                    <div class="bar" style="width: 0%; background-color: #27ae60;" data-width="${(data.probability_no_disease * 100).toFixed(1)}"></div>
+                                    <span class="percentage">0%</span>
+                                </div>
+                            </div>
+                            <div class="prob-bar">
+                                <label>Heart Disease</label>
+                                <div class="bar-container">
+                                    <div class="bar" style="width: 0%; background-color: #e74c3c;" data-width="${(data.probability_disease * 100).toFixed(1)}"></div>
+                                    <span class="percentage">0%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="risk-level" style="background-color: ${riskColor}20; border-left: 4px solid ${riskColor};">
+                        <h4><i class="fas fa-info-circle"></i> Risk Level: ${data.risk_level}</h4>
+                        <p>${getRiskMessage(data.risk_level, data.probability_disease)}</p>
+                    </div>
+                    
+                    <div class="recommendations">
+                        <h4><i class="fas fa-lightbulb"></i> Recommendations</h4>
+                        <ul>
+                            ${getRecommendations(data.risk_level, data.probability_disease).map(rec => `<li>${rec}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+            `;
+            
+            results.style.display = 'block';
+            
+            // Animate results appearance
+            anime({
+                targets: '.result-card',
+                translateY: [50, 0],
+                opacity: [0, 1],
+                duration: 800,
+                easing: 'easeOutExpo'
+            });
+            
+            // Animate probability bars
+            setTimeout(() => {
+                animateProbabilityBars(data);
+            }, 500);
+            
+            // Create interactive charts
+            setTimeout(() => {
+                createRiskChart(data);
+                createFactorsChart(data);
+                displayHealthTips(data);
+            }, 1000);
+            
+            results.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function animateProbabilityBars(data) {
+            const bars = document.querySelectorAll('.bar');
+            const percentages = document.querySelectorAll('.percentage');
+            
+            bars.forEach((bar, index) => {
+                const targetWidth = bar.getAttribute('data-width');
+                const targetPercentage = index === 0 ? data.probability_no_disease * 100 : data.probability_disease * 100;
+                
+                anime({
+                    targets: bar,
+                    width: targetWidth + '%',
+                    duration: 1500,
+                    easing: 'easeOutExpo'
+                });
+                
+                anime({
+                    targets: percentages[index],
+                    innerHTML: [0, targetPercentage.toFixed(1) + '%'],
+                    duration: 1500,
+                    easing: 'easeOutExpo',
+                    round: 1
+                });
+            });
+        }
+        
+        function createRiskChart(data) {
+            const ctx = document.getElementById('riskChart').getContext('2d');
+            
+            if (riskChart) {
+                riskChart.destroy();
+            }
+            
+            riskChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['No Heart Disease', 'Heart Disease Risk'],
+                    datasets: [{
+                        data: [data.probability_no_disease * 100, data.probability_disease * 100],
+                        backgroundColor: ['#27ae60', '#e74c3c'],
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.parsed.toFixed(1) + '%';
+                                }
+                            }
+                        }
+                    },
+                    animation: {
+                        animateRotate: true,
+                        duration: 2000
+                    }
+                }
+            });
+        }
+        
+        function createFactorsChart(data) {
+            const ctx = document.getElementById('factorsChart').getContext('2d');
+            
+            if (factorsChart) {
+                factorsChart.destroy();
+            }
+            
+            // Mock factor analysis (in real app, this would come from feature importance)
+            const factors = [
+                { name: 'Age', impact: 25 },
+                { name: 'BMI', impact: 20 },
+                { name: 'Exercise', impact: 15 },
+                { name: 'Smoking', impact: 18 },
+                { name: 'Diabetes', impact: 12 },
+                { name: 'Diet', impact: 10 }
+            ];
+            
+            factorsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: factors.map(f => f.name),
+                    datasets: [{
+                        label: 'Risk Impact (%)',
+                        data: factors.map(f => f.impact),
+                        backgroundColor: '#667eea',
+                        borderRadius: 8,
+                        borderSkipped: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 30,
+                            grid: {
+                                color: 'rgba(0,0,0,0.1)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeOutExpo'
+                    }
+                }
+            });
+        }
+        
+        function displayHealthTips(data) {
+            const tipsContent = document.getElementById('healthTipsContent');
+            const tips = getHealthTips(data);
+            
+            tipsContent.innerHTML = `
+                <div class="tips-grid">
+                    ${tips.map(tip => `
+                        <div class="tip-card">
+                            <div class="tip-icon">
+                                <i class="fas fa-${tip.icon}"></i>
+                            </div>
+                            <div class="tip-content">
+                                <h4>${tip.title}</h4>
+                                <p>${tip.description}</p>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            // Animate tips
+            anime({
+                targets: '.tip-card',
+                translateY: [30, 0],
+                opacity: [0, 1],
+                duration: 600,
+                delay: anime.stagger(100),
+                easing: 'easeOutExpo'
+            });
+        }
+
+        function displayError(error) {
+            const results = document.getElementById('results');
+            const resultContent = document.getElementById('resultContent');
+            
+            resultContent.innerHTML = `
+                <div class="error-card">
+                    <h3><i class="fas fa-exclamation-circle"></i> Error</h3>
+                    <p>${error}</p>
+                </div>
+            `;
+            
+            results.style.display = 'block';
+        }
+
+        function getRiskMessage(riskLevel, probability) {
+            if (riskLevel === 'High') {
+                return `You have a ${(probability * 100).toFixed(1)}% probability of having heart disease. Please consult with a healthcare professional immediately.`;
+            } else if (riskLevel === 'Medium') {
+                return `You have a ${(probability * 100).toFixed(1)}% probability of having heart disease. Consider lifestyle changes and regular health checkups.`;
+            } else {
+                return `You have a ${(probability * 100).toFixed(1)}% probability of having heart disease. Continue maintaining a healthy lifestyle.`;
+            }
+        }
+
+        function getRecommendations(riskLevel, probability) {
+            const recommendations = [];
+            
+            if (riskLevel === 'High') {
+                recommendations.push('Schedule an appointment with a cardiologist immediately');
+                recommendations.push('Consider comprehensive cardiac testing');
+                recommendations.push('Implement strict dietary and exercise changes');
+                recommendations.push('Monitor blood pressure and cholesterol regularly');
+            } else if (riskLevel === 'Medium') {
+                recommendations.push('Schedule regular health checkups');
+                recommendations.push('Adopt a heart-healthy diet');
+                recommendations.push('Engage in regular physical activity');
+                recommendations.push('Manage stress levels effectively');
+            } else {
+                recommendations.push('Maintain current healthy lifestyle habits');
+                recommendations.push('Continue regular exercise routine');
+                recommendations.push('Keep up with annual health checkups');
+                recommendations.push('Stay informed about heart health');
+            }
+            
+            return recommendations;
+        }
+        
+        function getHealthTips(data) {
+            const tips = [];
+            
+            if (data.risk_level === 'High') {
+                tips.push(
+                    {
+                        icon: 'heartbeat',
+                        title: 'Immediate Action',
+                        description: 'Consult a cardiologist within 48 hours for comprehensive evaluation.'
+                    },
+                    {
+                        icon: 'utensils',
+                        title: 'Diet Changes',
+                        description: 'Switch to a Mediterranean diet rich in fruits, vegetables, and lean proteins.'
+                    },
+                    {
+                        icon: 'running',
+                        title: 'Exercise Plan',
+                        description: 'Start with 30 minutes of moderate exercise daily, gradually increasing intensity.'
+                    },
+                    {
+                        icon: 'ban-smoking',
+                        title: 'Lifestyle Changes',
+                        description: 'Quit smoking immediately and limit alcohol consumption to reduce risk factors.'
+                    }
+                );
+            } else if (data.risk_level === 'Medium') {
+                tips.push(
+                    {
+                        icon: 'calendar-check',
+                        title: 'Regular Checkups',
+                        description: 'Schedule bi-annual health checkups to monitor your heart health.'
+                    },
+                    {
+                        icon: 'apple-alt',
+                        title: 'Healthy Eating',
+                        description: 'Focus on whole foods, reduce processed foods, and control portion sizes.'
+                    },
+                    {
+                        icon: 'dumbbell',
+                        title: 'Physical Activity',
+                        description: 'Aim for 150 minutes of moderate exercise per week for optimal heart health.'
+                    },
+                    {
+                        icon: 'spa',
+                        title: 'Stress Management',
+                        description: 'Practice meditation, yoga, or deep breathing exercises to reduce stress.'
+                    }
+                );
+            } else {
+                tips.push(
+                    {
+                        icon: 'thumbs-up',
+                        title: 'Keep It Up',
+                        description: 'Continue your current healthy lifestyle habits and regular exercise routine.'
+                    },
+                    {
+                        icon: 'shield-alt',
+                        title: 'Prevention',
+                        description: 'Maintain preventive measures and stay informed about heart health.'
+                    },
+                    {
+                        icon: 'users',
+                        title: 'Community',
+                        description: 'Share your healthy habits with family and friends to create a supportive environment.'
+                    },
+                    {
+                        icon: 'chart-line',
+                        title: 'Monitoring',
+                        description: 'Keep track of your health metrics and continue regular health screenings.'
+                    }
+                );
+            }
+            
+            return tips;
+        }
+    </script>
+</body>
+</html>
