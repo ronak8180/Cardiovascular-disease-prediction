@@ -47,34 +47,38 @@ def save_history_to_file():
 def load_trained_model():
     """Load the pre-trained model with 95% accuracy"""
     global models, preprocessor, feature_columns
-    
+
     try:
-        print("Loading pre-trained model...")
-        
+        logger.info("Loading pre-trained model...")
+
         # Check if model files exist
         if not os.path.exists('trained_model.pkl'):
-            print("❌ Pre-trained model not found!")
-            print("Please run 'python save_model.py' first to create the model files.")
+            logger.error("Pre-trained model not found!")
+            logger.info("Please run 'python save_model.py' first to create the model files.")
             return False
-        
+
+        logger.info("Model file exists, loading...")
+
         # Load the pre-trained model
         with open('trained_model.pkl', 'rb') as f:
             models['random_forest'] = pickle.load(f)
-        
+        logger.info("Model loaded successfully.")
+
         # Load the preprocessor
         with open('preprocessor.pkl', 'rb') as f:
             preprocessor = pickle.load(f)
-        
+        logger.info("Preprocessor loaded successfully.")
+
         # Load feature columns
         with open('feature_columns.pkl', 'rb') as f:
             feature_columns = pickle.load(f)
-        
-    
+        logger.info(f"Feature columns loaded successfully: {len(feature_columns)} columns.")
+
         return True
-        
+
     except Exception as e:
-        print(f"❌ Error loading pre-trained model: {str(e)}")
-        print("Falling back to training a new model...")
+        logger.error(f"Error loading pre-trained model: {str(e)}")
+        logger.info("Falling back to training a new model...")
         return train_new_model()
 
 def train_new_model():
@@ -324,14 +328,15 @@ def api_predict():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+# Load the pre-trained model at module import time (works for both local and deployed)
+print("Starting Heart Disease Prediction App...")
+if not load_trained_model():
+    print("Failed to load model. Exiting...")
+    exit(1)
+
+# Load existing history from file
+load_history_from_file()
+
 if __name__ == '__main__':
-    print("Starting Heart Disease Prediction App...")
-    
-    # Load the pre-trained model instead of training
-    if load_trained_model():
-        # Load existing history from file
-        load_history_from_file()
-        print("Starting Flask server...")
-        app.run(debug=True, host='0.0.0.0', port=5000)
-    else:
-        print("Failed to load model. Exiting...")
+    print("Starting Flask server...")
+    app.run(debug=True, host='0.0.0.0', port=5000)
