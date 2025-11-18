@@ -138,14 +138,7 @@ def train_new_model():
     # Calculate metrics
     accuracy = rf_model.score(X_test_processed, y_test)
     roc_auc = roc_auc_score(y_test, y_pred_proba[:, 1])
-    
-    print("=" * 50)
-    print("MODEL EVALUATION RESULTS")
-    print("=" * 50)
-    print("Random Forest Report:")
-    print(classification_report(y_test, y_pred))
-    print(f"ROC AUC Score:")
-    print(f"Random Forest: {roc_auc:.4f}")
+
     
     print("Models trained successfully!")
     return True
@@ -153,27 +146,38 @@ def train_new_model():
 def predict_heart_disease(input_data, model_name='random_forest'):
     """Make prediction using the trained model"""
     global models, preprocessor
-    
+
     try:
+        # Check if required components are loaded
+        if feature_columns is None:
+            print("Error: feature_columns not loaded")
+            return None
+        if preprocessor is None:
+            print("Error: preprocessor not loaded")
+            return None
+        if model_name not in models or models[model_name] is None:
+            print(f"Error: model '{model_name}' not loaded")
+            return None
+
         # Convert input data to DataFrame
         input_df = pd.DataFrame([input_data])
-        
+
         # Ensure all required columns are present
         for col in feature_columns:
             if col not in input_df.columns:
                 input_df[col] = 0  # Default value for missing columns
-        
+
         # Reorder columns to match training data
         input_df = input_df[feature_columns]
-        
+
         # Transform the input data
         input_processed = preprocessor.transform(input_df)
-        
+
         # Make prediction
         model = models[model_name]
         prediction = model.predict(input_processed)[0]
         probabilities = model.predict_proba(input_processed)[0]
-        
+
         # Calculate risk level
         prob_disease = probabilities[1]
         if prob_disease >= 0.7:
@@ -182,7 +186,7 @@ def predict_heart_disease(input_data, model_name='random_forest'):
             risk_level = "Medium"
         else:
             risk_level = "Low"
-        
+
         return {
             'prediction': int(prediction),
             'probability_disease': float(prob_disease),
@@ -190,7 +194,7 @@ def predict_heart_disease(input_data, model_name='random_forest'):
             'risk_level': risk_level,
             'model_used': model_name
         }
-        
+
     except Exception as e:
         print(f"Error in prediction: {str(e)}")
         return None
