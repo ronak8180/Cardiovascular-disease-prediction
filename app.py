@@ -12,8 +12,12 @@ from sklearn.metrics import classification_report, roc_auc_score
 from imblearn.over_sampling import SMOTE
 import warnings
 warnings.filterwarnings('ignore')
+from logger import setup_logger
 
 app = Flask(__name__)
+
+# Set up logger
+logger = setup_logger()
 
 # Global variables to store the trained models and preprocessor
 models = {}
@@ -65,12 +69,7 @@ def load_trained_model():
         with open('feature_columns.pkl', 'rb') as f:
             feature_columns = pickle.load(f)
         
-        print("✅ Pre-trained model loaded successfully!")
-        print("🎯 Model Performance:")
-        print("   - Accuracy: 95% (from Jupyter notebook)")
-        print("   - ROC AUC: 0.9898")
-        print("   - Model: Random Forest with optimized parameters")
-        
+    
         return True
         
     except Exception as e:
@@ -199,37 +198,40 @@ def predict_heart_disease(input_data, model_name='random_forest'):
 # Routes
 @app.route('/')
 def home():
-    """Redirect to dashboard"""
-    return redirect('/dashboard')
+    """Redirect to predict"""
+    logger.info(f"Request received: {request.method} {request.path}")
+    return redirect('/predict')
 
-@app.route('/dashboard')
-def dashboard():
-    """Render the dashboard page"""
-    return render_template('dashboard.html')
+
 
 @app.route('/predict')
 def predict_page():
     """Render the prediction page"""
+    logger.info(f"Request received: {request.method} {request.path}")
     return render_template('index.html')
 
 @app.route('/history')
 def history():
     """Render the history page"""
+    logger.info(f"Request received: {request.method} {request.path}")
     return render_template('history.html')
 
 @app.route('/about')
 def about():
     """Render the about page"""
+    logger.info(f"Request received: {request.method} {request.path}")
     return render_template('about.html')
 
 @app.route('/api/history')
 def api_history():
     """Return prediction history (latest first)"""
+    logger.info(f"Request received: {request.method} {request.path}")
     return jsonify({'items': prediction_history})
 
 @app.route('/predict', methods=['POST'])
 def predict():
     """Handle prediction requests"""
+    logger.info(f"Request received: {request.method} {request.path}")
     try:
         # Get form data
         form_data = request.form.to_dict()
@@ -286,6 +288,7 @@ def predict():
 @app.route('/api/predict', methods=['POST'])
 def api_predict():
     """API endpoint for predictions"""
+    logger.info(f"Request received: {request.method} {request.path}")
     try:
         data = request.get_json()
         

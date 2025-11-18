@@ -725,7 +725,7 @@ header p {
     box-shadow: 0 14px 34px rgba(0,0,0,0.2);
     display: flex;
     align-items: center;
-    gap: 0px;
+    gap: 30px;
     overflow: hidden;
 }
 
@@ -1134,7 +1134,7 @@ header p {
     border-radius: 16px;
     padding: 22px 22px 64px 22px;
     box-shadow: 0 14px 34px rgba(0,0,0,0.2);
-    margin-bottom: 26px;
+    margin-bottom: 40px;
     position: relative;
     border: 1px solid rgba(0,0,0,0.06);
     overflow: hidden;
@@ -1247,7 +1247,7 @@ header p {
     border-radius: 16px;
     padding: 22px;
     box-shadow: 0 14px 34px rgba(0,0,0,0.2);
-    margin-bottom: 26px;
+    margin-bottom: 40px;
     border: 1px solid rgba(0,0,0,0.06);
 }
 

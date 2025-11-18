@@ -19,10 +19,6 @@
                 <span>HeartAI</span>
             </div>
             <div class="nav-links">
-                <a href="/dashboard" class="nav-link">
-                    <i class="fas fa-tachometer-alt"></i>
-                    Dashboard
-                </a>
                 <a href="/predict" class="nav-link">
                     <i class="fas fa-calculator"></i>
                     Predict
@@ -46,30 +42,10 @@
 
         <!-- Filter and Search -->
         <div class="history-controls">
-            <div class="filter-section">
-                <div class="filter-group">
-                    <label for="dateFilter">Date Range:</label>
-                    <select id="dateFilter" onchange="filterHistory()">
-                        <option value="all">All Time</option>
-                        <option value="week">Last Week</option>
-                        <option value="month">Last Month</option>
-                        <option value="3months">Last 3 Months</option>
-                        <option value="year">Last Year</option>
-                    </select>
-                </div>
-                
-                <div class="filter-group">
-                    <label for="riskFilter">Risk Level:</label>
-                    <select id="riskFilter" onchange="filterHistory()">
-                        <option value="all">All Risk Levels</option>
-                        <option value="low">Low Risk</option>
-                        <option value="medium">Medium Risk</option>
-                        <option value="high">High Risk</option>
-                    </select>
-                </div>
-                
-            </div>
-            
+
+
+
+
             <div class="export-section">
                 <button class="export-btn" onclick="exportHistory()">
                     <i class="fas fa-download"></i>
@@ -376,8 +352,8 @@
         function filterHistory() {
             const dateFilter = document.getElementById('dateFilter').value;
             const riskFilter = document.getElementById('riskFilter').value;
-            
-            filteredData = mockHistoryData.filter(pred => {
+
+            filteredData = historyData.filter(pred => {
                 let dateMatch = true;
                 let riskMatch = true;
                 
