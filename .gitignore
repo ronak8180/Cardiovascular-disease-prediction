@@ -1,0 +1,38 @@
+# Virtual environment
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+
+# Model files (if not to be committed, but since they are in the repo, maybe keep)
+# feature_columns.pkl
+# preprocessor.pkl
+# trained_model.pkl
+# prediction_history.json
+# processed_data.csv
+# feature_importance.png
+# prediction_result.png
