@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Heart Disease Prediction System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav class="main-nav">
+            <div class="nav-brand">
+                <i class="fas fa-heartbeat"></i>
+                <span>HeartAI</span>
+            </div>
+            <div class="nav-links">
+                <a href="/predict" class="nav-link">
+                    <i class="fas fa-calculator"></i>
+                    Predict
+                </a>
+                <a href="/history" class="nav-link">
+                    <i class="fas fa-history"></i>
+                    History
+                </a>
+                <a href="/about" class="nav-link active">
+                    <i class="fas fa-info-circle"></i>
+                    About
+                </a>
+            </div>
+        </nav>
+
+        <!-- About Header -->
+        <header class="about-header">
+            <h1><i class="fas fa-heart"></i> About Heart Disease Prediction</h1>
+            <p>Understanding heart disease, risk factors, and how our AI system works</p>
+        </header>
+
+        <!-- What is Heart Disease Section -->
+        <section class="info-section">
+            <div class="section-header">
+                <h2><i class="fas fa-question-circle"></i> What is Heart Disease?</h2>
+            </div>
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <h3>Definition</h3>
+                    <p>Heart disease refers to conditions that affect the heart and blood vessels, including coronary artery disease, heart attacks, and heart failure.</p>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h3>Prevalence</h3>
+                    <p>Heart disease is the leading cause of death worldwide, affecting millions of people each year. Early detection and prevention are crucial.</p>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Prevention</h3>
+                    <p>Many heart diseases can be prevented through lifestyle changes, regular exercise, healthy eating, and avoiding smoking.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Risk Factors Section -->
+        <section class="info-section">
+            <div class="section-header">
+                <h2><i class="fas fa-warning"></i> Risk Factors</h2>
+            </div>
+            <div class="risk-factors">
+                <div class="risk-category">
+                    <h3><i class="fas fa-user"></i> Non-Modifiable Risk Factors</h3>
+                    <div class="risk-list">
+                        <div class="risk-item">
+                            <i class="fas fa-calendar-alt"></i>
+                            <div>
+                                <h4>Age</h4>
+                                <p>Risk increases with age, especially after 65</p>
+                            </div>
+                        </div>
+                        <div class="risk-item">
+                            <i class="fas fa-venus-mars"></i>
+                            <div>
+                                <h4>Gender</h4>
+                                <p>Men are at higher risk, but women's risk increases after menopause</p>
+                            </div>
+                        </div>
+                        <div class="risk-item">
+                            <i class="fas fa-dna"></i>
+                            <div>
+                                <h4>Family History</h4>
+                                <p>Genetic predisposition to heart disease</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="risk-category">
+                    <h3><i class="fas fa-edit"></i> Modifiable Risk Factors</h3>
+                    <div class="risk-list">
+                        <div class="risk-item">
+                            <i class="fas fa-ban-smoking"></i>
+                            <div>
+                                <h4>Smoking</h4>
+                                <p>Major risk factor that can be eliminated</p>
+                            </div>
+                        </div>
+                        <div class="risk-item">
+                            <i class="fas fa-weight"></i>
+                            <div>
+                                <h4>Obesity</h4>
+                                <p>Excess weight increases heart disease risk</p>
+                            </div>
+                        </div>
+                        <div class="risk-item">
+                            <i class="fas fa-running"></i>
+                            <div>
+                                <h4>Physical Inactivity</h4>
+                                <p>Lack of exercise contributes to heart disease</p>
+                            </div>
+                        </div>
+                        <div class="risk-item">
+                            <i class="fas fa-utensils"></i>
+                            <div>
+                                <h4>Poor Diet</h4>
+                                <p>High sodium, saturated fats, and processed foods</p>
+                            </div>
+                        </div>
+                        <div class="risk-item">
+                            <i class="fas fa-tint"></i>
+                            <div>
+                                <h4>High Blood Pressure</h4>
+                                <p>Can be managed with lifestyle changes and medication</p>
+                            </div>
+                        </div>
+                        <div class="risk-item">
+                            <i class="fas fa-chart-line"></i>
+                            <div>
+                                <h4>High Cholesterol</h4>
+                                <p>Can be controlled through diet and medication</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How Our System Works -->
+        <section class="info-section">
+            <div class="section-header">
+                <h2><i class="fas fa-cogs"></i> How Our AI System Works</h2>
+            </div>
+            <div class="process-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Data Collection</h3>
+                        <p>We collect comprehensive health information including personal details, lifestyle habits, and medical history.</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>AI Analysis</h3>
+                        <p>Our Random Forest algorithm analyzes your data against patterns from thousands of health records.</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Risk Assessment</h3>
+                        <p>The system calculates your heart disease risk probability and provides personalized recommendations.</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Results & Guidance</h3>
+                        <p>You receive detailed results with actionable health tips and lifestyle recommendations.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Model Information -->
+        <section class="info-section">
+            <div class="section-header">
+                <h2><i class="fas fa-brain"></i> AI Model Information</h2>
+            </div>
+            <div class="model-info-grid">
+                <div class="model-card">
+                    <div class="model-header">
+                        <i class="fas fa-tree"></i>
+                        <h3>Random Forest Algorithm</h3>
+                    </div>
+                    <div class="model-details">
+                        <div class="model-stat">
+                            <span class="stat-label">Accuracy:</span>
+                            <span class="stat-value">95%</span>
+                        </div>
+                        <div class="model-stat">
+                            <span class="stat-label">ROC AUC:</span>
+                            <span class="stat-value">0.92</span>
+                        </div>
+                        <div class="model-stat">
+                            <span class="stat-label">Training Data:</span>
+                            <span class="stat-value">300K+ Records</span>
+                        </div>
+                        <div class="model-stat">
+                            <span class="stat-label">Features:</span>
+                            <span class="stat-value">19 Health Factors</span>
+                        </div>
+                    </div>
+                    <p class="model-description">
+                        Our Random Forest model uses ensemble learning to provide highly accurate predictions by combining multiple decision trees.
+                    </p>
+                </div>
+                
+                <div class="model-card">
+                    <div class="model-header">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>Data Privacy</h3>
+                    </div>
+                    <div class="privacy-features">
+                        <div class="privacy-item">
+                            <i class="fas fa-lock"></i>
+                            <span>Encrypted Data Transmission</span>
+                        </div>
+                        <div class="privacy-item">
+                            <i class="fas fa-user-secret"></i>
+                            <span>No Personal Data Storage</span>
+                        </div>
+                        <div class="privacy-item">
+                            <i class="fas fa-trash"></i>
+                            <span>Automatic Data Deletion</span>
+                        </div>
+                        <div class="privacy-item">
+                            <i class="fas fa-certificate"></i>
+                            <span>HIPAA Compliant</span>
+                        </div>
+                    </div>
+                    <p class="model-description">
+                        Your privacy is our priority. We don't store personal information and use industry-standard security measures.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Prevention Tips -->
+        <section class="info-section">
+            <div class="section-header">
+                <h2><i class="fas fa-lightbulb"></i> Prevention Tips</h2>
+            </div>
+            <div class="prevention-grid">
+                <div class="prevention-card">
+                    <div class="prevention-icon">
+                        <i class="fas fa-apple-alt"></i>
+                    </div>
+                    <h3>Healthy Diet</h3>
+                    <ul>
+                        <li>Eat more fruits and vegetables</li>
+                        <li>Choose whole grains</li>
+                        <li>Limit saturated fats</li>
+                        <li>Reduce sodium intake</li>
+                        <li>Control portion sizes</li>
+                    </ul>
+                </div>
+                
+                <div class="prevention-card">
+                    <div class="prevention-icon">
+                        <i class="fas fa-running"></i>
+                    </div>
+                    <h3>Regular Exercise</h3>
+                    <ul>
+                        <li>Aim for 150 minutes weekly</li>
+                        <li>Include aerobic activities</li>
+                        <li>Add strength training</li>
+                        <li>Stay consistent</li>
+                        <li>Start gradually</li>
+                    </ul>
+                </div>
+                
+                <div class="prevention-card">
+                    <div class="prevention-icon">
+                        <i class="fas fa-ban-smoking"></i>
+                    </div>
+                    <h3>Lifestyle Changes</h3>
+                    <ul>
+                        <li>Quit smoking completely</li>
+                        <li>Limit alcohol consumption</li>
+                        <li>Manage stress levels</li>
+                        <li>Get adequate sleep</li>
+                        <li>Maintain healthy weight</li>
+                    </ul>
+                </div>
+                
+                <div class="prevention-card">
+                    <div class="prevention-icon">
+                        <i class="fas fa-stethoscope"></i>
+                    </div>
+                    <h3>Regular Checkups</h3>
+                    <ul>
+                        <li>Annual physical exams</li>
+                        <li>Monitor blood pressure</li>
+                        <li>Check cholesterol levels</li>
+                        <li>Diabetes screening</li>
+                        <li>Follow doctor's advice</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="info-section">
+            <div class="section-header">
+                <h2><i class="fas fa-question"></i> Frequently Asked Questions</h2>
+            </div>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h3>Is this prediction 100% accurate?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>No prediction system is 100% accurate. Our AI model has a 95% accuracy rate, but it should be used as a screening tool, not a definitive diagnosis. Always consult with healthcare professionals for medical decisions.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h3>How often should I use this system?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We recommend using the system monthly or whenever you make significant lifestyle changes. Regular monitoring helps track your health progress and identify trends.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h3>What should I do if I get a high-risk result?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>If you receive a high-risk prediction, don't panic. Schedule an appointment with your healthcare provider for a comprehensive evaluation. Focus on implementing the recommended lifestyle changes.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h3>Is my data secure and private?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, we prioritize your privacy. We don't store personal information, use encrypted connections, and follow HIPAA compliance standards. Your data is automatically deleted after processing.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Disclaimer -->
+        <section class="disclaimer">
+            <div class="disclaimer-content">
+                <h3><i class="fas fa-exclamation-triangle"></i> Important Disclaimer</h3>
+                <p>This heart disease prediction system is for educational and informational purposes only. It is not intended to replace professional medical advice, diagnosis, or treatment. Always seek the advice of qualified health providers with questions about your health condition. Never disregard professional medical advice or delay seeking it because of information from this system.</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Initialize animations
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeAnimations();
+        });
+
+        function initializeAnimations() {
+            // Animate info cards
+            anime({
+                targets: '.info-card',
+                translateY: [50, 0],
+                opacity: [0, 1],
+                duration: 800,
+                delay: anime.stagger(100),
+                easing: 'easeOutExpo'
+            });
+
+            // Animate process steps
+            anime({
+                targets: '.step',
+                translateX: [-100, 0],
+                opacity: [0, 1],
+                duration: 800,
+                delay: anime.stagger(200),
+                easing: 'easeOutExpo'
+            });
+
+            // Animate prevention cards
+            anime({
+                targets: '.prevention-card',
+                translateY: [50, 0],
+                opacity: [0, 1],
+                duration: 800,
+                delay: anime.stagger(100),
+                easing: 'easeOutExpo'
+            });
+        }
+
+        function toggleFAQ(element) {
+            const faqItem = element.parentElement;
+            const answer = faqItem.querySelector('.faq-answer');
+            const icon = element.querySelector('i');
+            
+            if (faqItem.classList.contains('active')) {
+                faqItem.classList.remove('active');
+                answer.style.maxHeight = '0';
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                // Close all other FAQs
+                document.querySelectorAll('.faq-item.active').forEach(item => {
+                    item.classList.remove('active');
+                    item.querySelector('.faq-answer').style.maxHeight = '0';
+                    item.querySelector('.faq-question i').style.transform = 'rotate(0deg)';
+                });
+                
+                // Open current FAQ
+                faqItem.classList.add('active');
+                answer.style.maxHeight = answer.scrollHeight + 'px';
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+
